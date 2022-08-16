@@ -1,7 +1,8 @@
 package org.jsoup.parser;
 
 import org.jsoup.internal.StringUtil;
-import org.jsoup.helper.Validate;
+import org.jsoup.helper.*;
+import org.jsoup.examples.HtmlToPlainText;;
 
 /**
  * A character queue with parsing helpers.
@@ -168,7 +169,8 @@ public class TokenQueue {
         int len = seq.length();
         if (len > remainingLength())
             throw new IllegalStateException("Queue not long enough to consume sequence");
-        
+        else{
+        }
         pos += len;
     }
 
@@ -183,14 +185,12 @@ public class TokenQueue {
             String consumed = queue.substring(pos, offset);
             pos += consumed.length();
             return consumed;
-        } else {
+        } else 
             return remainder();
-        }
     }
     
     public String consumeToIgnoreCase(String seq) {
-        int start = pos;
-        String first = seq.substring(0, 1);
+        int start = pos; String first = seq.substring(0, 1);
         boolean canScan = first.toLowerCase().equals(first.toUpperCase()); // if first is not cased, use index of
         while (!isEmpty()) {
             if (matches(seq))
@@ -258,12 +258,10 @@ public class TokenQueue {
      * @return data matched from the queue
      */
     public String chompBalanced(char open, char close) {
-        int start = -1;
-        int end = -1;
+        int start = -1, end = -1;
         int depth = 0;
         char last = 0;
-        boolean inSingleQuote = false;
-        boolean inDoubleQuote = false;
+        boolean inSingleQuote = false, inDoubleQuote = false;
 
         do {
             if (isEmpty()) break;
@@ -292,6 +290,8 @@ public class TokenQueue {
         final String out = (end >= 0) ? queue.substring(start, end) : "";
         if (depth > 0) {// ran out of queue before seeing enough )
             Validate.fail("Did not find balanced marker at '" + out + "'");
+        }else{
+            return out;
         }
         return out;
     }
@@ -374,9 +374,7 @@ public class TokenQueue {
     public String consumeCssIdentifier() {
         int start = pos;
         while (!isEmpty() && (matchesWord() || matchesAny('-', '_')))
-            pos++;
-
-        return queue.substring(start, pos);
+            pos++; return queue.substring(start, pos);
     }
 
     /**
